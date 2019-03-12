@@ -21,10 +21,11 @@ from .views import index_view, about_view, contact_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("/", index_view, name='index'),
-    path('about/', about_view, name='about'),
-    path('contact/', contact_view, name='contact'),
-    path('accounts/', include('accounts.urls')),
+    path("", index_view, name='index'),
+    path('about', about_view, name='about'),
+    path('contact', contact_view, name='contact'),
+    path('properties/', include('properties.urls')),
+    path('users/', include('accounts.urls')),
 ]
 
 if settings.DEBUG:

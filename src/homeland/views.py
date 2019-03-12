@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from properties.models import Property
+from properties.choices import price_choices, area_choices, status_choices, type_choices, verification_choices
 
 
 def index_view(request):
@@ -7,9 +8,11 @@ def index_view(request):
         '-timestamp')[:3]
     context = {
         'properties': properties,
-        # 'state_choices': state_choices,
-        # 'bedroom_choices': bedroom_choices,
-        # 'price_choices': price_choices
+        'price_choices': price_choices,
+        'area_choices': area_choices,
+        'status_choices': status_choices,
+        'type_choices': type_choices,
+        'verification_choices': verification_choices
     }
     return render(request, 'pages/index.html', context)
 

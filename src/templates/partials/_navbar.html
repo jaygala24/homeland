@@ -51,7 +51,7 @@
                 class="active"
               {% endif %}
               >
-                <a href="{properties.html}">Properties</a>
+                <a href="{% url 'properties:list' %}">Properties</a>
               </li>
               <li
               {% if 'contact' in request.path %}
