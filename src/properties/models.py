@@ -28,6 +28,10 @@ class Property(models.Model):
     photo_5 = models.ImageField(upload_to=upload_location, blank=True)
     status = models.CharField(max_length=20)
     is_verified = models.BooleanField(default=False)
+    is_school = models.BooleanField(default=False)
+    is_firestation = models.BooleanField(default=False)
+    is_policestation = models.BooleanField(default=False)
+    is_hospital = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
