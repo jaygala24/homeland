@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+<!-- Main Content -->
+{% block content %}
+<div
+  class="site-blocks-cover inner-page-cover overlay"
+  style="background-image: url('/static/images/hero_bg_1.jpg');"
+  data-aos="fade"
+  data-stellar-background-ratio="0.5"
+>
+  <div class="container">
+    <div class="row align-items-center justify-content-center text-center">
+      <div class="col-md-10">
+        <h1 class="mb-2">Add Property</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="site-section">
+  <div class="container">
+    <div class="row align-items-center justify-content-center">
+      <!-- Alerts -->
+      {% include 'partials/_alerts.html' %}
+      
+      <div class="col-md-12 col-lg-8 mb-5">
+        <form
+          action="{% url 'properties:add' %}"
+          method="POST"
+          enctype="multipart/form-data"
+          class="p-5 bg-white border"
+        >
+          {% csrf_token %}
+          <div class="row form-group">
+            <div class="col-md-12 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="title">Title</label>
+              <input
+                type="text"
+                name="title"
+                class="form-control"
+                placeholder="Title here..."
+                value="{{ values.title }}"
+              />
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-12">
+              <label class="font-weight-bold" for="address">Address</label>
+              <textarea
+                name="address"
+                cols="30"
+                rows="5"
+                class="form-control"
+                placeholder="Address here..."
+              >{{ values.address }}</textarea>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="zipcode">Zipcode</label>
+              <input
+                type="text"
+                id="zipcode"
+                class="form-control"
+                name="zipcode"
+                placeholder="Zipcode here..."
+                value="{{ values.zipcode }}"
+              />
+            </div>
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="area">Area</label>
+              <select name="area" class="form-control d-block rounded-2">
+                {% for key,value in area_choices.items %}
+                <option value="{{ key }}"
+                {% if key == values.area %}
+                    selected
+                {% endif %}
+                >{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="types">Type</label>
+              <select name="types" class="form-control d-block rounded-2">
+                {% for key,value in type_choices.items %}
+                <option value="{{ key }}"
+                {% if key == values.types %}
+                    selected
+                {% endif %}
+                >{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="types">Status</label>
+              <select name="status" class="form-control d-block rounded-2">
+                {% for key,value in status_choices.items %}
+                <option value="{{ key }}"
+                {% if key == values.area %}
+                    selected
+                {% endif %}
+                >{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="sqft">SQ FT</label>
+              <input
+                type="text"
+                id="sqft"
+                class="form-control"
+                name="sqft"
+                placeholder="SQ FT here..."
+                value="{{ values.sqft }}"
+              />
+            </div>
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="price">Price</label>
+              <input
+                type="text"
+                id="price"
+                class="form-control"
+                name="price"
+                placeholder="Price here..."
+                value="{{ values.price }}"
+              />
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-12">
+              <label class="font-weight-bold" for="description"
+                >Description</label
+              >
+              <textarea
+                name="description"
+                cols="30"
+                rows="5"
+                class="form-control"
+                placeholder="Description here..."
+              >{{ values.description }}</textarea>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-12 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="photo_main"
+                >Photo Main</label
+              >
+              <input
+                type="file"
+                id="photo_main"
+                class="form-control"
+                name="photo_main"
+                value="{{ values.photo_main }}"
+              />
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-12 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="photo_1"
+                >Photo 1(Optional)</label
+              >
+              <input
+                type="file"
+                id="photo_1"
+                class="form-control"
+                name="photo_1"
+                value="{{ values.photo_1 }}"
+              />
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-12 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="photo_2"
+                >Photo 2(Optional)</label
+              >
+              <input
+                type="file"
+                id="photo_2"
+                class="form-control"
+                name="photo_2"
+                value="{{ values.photo_2 }}"
+              />
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-12 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="photo_3"
+                >Photo 3(Optional)</label
+              >
+              <input
+                type="file"
+                id="photo_3"
+                class="form-control"
+                name="photo_3"
+                value="{{ values.photo_3 }}"
+              />
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-12 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="photo_4"
+                >Photo 4(Optional)</label
+              >
+              <input
+                type="file"
+                id="photo_4"
+                class="form-control"
+                name="photo_4"
+                value="{{ values.photo_4 }}"
+              />
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-12 mb-3 mb-md-0">
+              <label class="font-weight-bold" for="photo_5"
+                >Photo 5(Optional)</label
+              >
+              <input
+                type="file"
+                id="photo_5"
+                class="form-control"
+                name="photo_5"
+                value="{{ values.photo_5 }}"
+              />
+            </div>
+          </div>
+          <div class="row form-group justify-content-center">
+            <input
+              type="submit"
+              value="Add Property"
+              class="btn btn-primary  py-2 px-4 mt-2 rounded-0"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -20,15 +20,6 @@
 <div class="site-section">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-12 col-lg-10 mb-5">
-        <p class="lead text-center">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dicta soluta
-          voluptate omnis quidem? Sapiente, quia deleniti itaque recusandae
-          veniam accusamus debitis nesciunt facere aperiam. Quo delectus rem id
-          labore eius.
-        </p>
-      </div>
-
       <!-- Alerts -->
       {% include 'partials/_alerts.html' %}
 
@@ -118,6 +109,13 @@
               value="Sign Up"
               class="btn btn-primary  py-2 px-4 mt-2 rounded-0"
             />
+          </div>
+          <div class="row form-group justify-content-center">
+            <p>
+              <a href="{% url 'accounts:login' %}" class="btn btn-link btn-2">
+                Already have a account
+              </a>
+            </p>
           </div>
         </form>
       </div>

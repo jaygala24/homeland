@@ -1,5 +1,4 @@
 price_choices = {
-    'All': 'All',
     2500000: '25,00,000',
     5000000: '50,00,000',
     7500000: '75,00,000',
@@ -23,7 +22,6 @@ price_choices = {
 }
 
 type_choices = {
-    'All': 'All',
     '1RK': '1RK',
     '1BHK': '1BHK',
     '2BHK': '2BHK',
@@ -34,7 +32,6 @@ type_choices = {
 }
 
 area_choices = {
-    'All': 'All',
     'Virar': 'Virar',
     'Nallasopara': 'Nallasopara',
     'VasaiRoad': 'Vasai Road',
@@ -67,13 +64,11 @@ area_choices = {
 }
 
 status_choices = {
-    'All': 'All',
     'Sale': 'Sale',
     'Rent': 'Rent'
 }
 
 verification_choices = {
-    'All': 'All',
     True: 'Verified',
     False: 'Not Verified'
 }

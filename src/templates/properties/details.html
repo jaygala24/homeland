@@ -149,21 +149,34 @@
           </p>
         </div>
       </div>
+
       <div class="col-lg-4">
         <div class="bg-white widget border rounded">
           <h3 class="h4 text-black widget-title mb-3">Contact Owner</h3>
           <form action="" class="form-contact-agent">
             <div class="form-group">
               <label for="name">Name</label>
-              <input type="text" id="name" class="form-control" />
+              <input type="text" id="name" class="form-control" 
+              {% if user.id != property.realtor %}
+                disabled
+              {% endif %}
+              />
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" id="email" class="form-control" />
+              <input type="email" id="email" class="form-control" 
+              {% if user.id != property.realtor %}
+                disabled
+              {% endif %}
+              />
             </div>
             <div class="form-group">
               <label for="phone">Phone</label>
-              <input type="text" id="phone" class="form-control" />
+              <input type="text" id="phone" class="form-control" 
+              {% if user.id != property.realtor %}
+                disabled
+              {% endif %}
+              />
             </div>
             <div class="form-group">
               <input
@@ -171,11 +184,14 @@
                 id="phone"
                 class="btn btn-primary"
                 value="Send Message"
+                {% if user.id != property.realtor %}
+                  disabled
+                {% endif %}
               />
             </div>
           </form>
         </div>
-
+        
         {% if property.is_verified %}
         <div class="bg-white widget border rounded">
           <h3 class="h4 text-black widget-title mb-3">Homeland Team</h3>

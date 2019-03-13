@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+<!-- Load Humanize -->
+{% load humanize %}
+
+<!-- Main Content -->
+{% block content %}
+<div
+  class="site-blocks-cover inner-page-cover overlay"
+  style="background-image: url('/static/images/hero_bg_1.jpg');"
+  data-aos="fade"
+  data-stellar-background-ratio="0.5"
+>
+  <div class="container">
+    <div class="row align-items-center justify-content-center text-center">
+      <div class="col-md-10">
+        <h1 class="mb-2">Dashboard</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="site-section site-section-sm">
+  <div class="container">
+    <div class="row mb-5 justify-content-center">
+      <!-- Alerts -->
+      {% include 'partials/_alerts.html' %}
+
+      <div class="col-md-12 col-lg-10 mb-5">
+        <p class="lead text-center">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dicta soluta
+          voluptate omnis quidem? Sapiente, quia deleniti itaque recusandae
+          veniam accusamus debitis nesciunt facere aperiam. Quo delectus rem id
+          labore eius.
+        </p>
+      </div>
+      <div class="col-md-6 col-lg-6 text-center border-bottom border-top py-3">
+        <span class="d-inline-block text-black mb-0 caption-text"
+          >Property</span
+        >
+      </div>
+      <div class="col-md-6 col-lg-6 text-center border-bottom border-top py-3">
+        <span class="d-inline-block text-black mb-0 caption-text">Action</span>
+      </div>
+      {% for property in properties %}
+      <div class="col-md-6 col-lg-6 text-center border-bottom py-3">
+        <a
+          href="{% url 'properties:detail' property.id %}"
+          class="btn btn-link btn-2"
+        >
+          <strong class="d-block">
+            {{ property.title }}
+          </strong>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-6 text-center border-bottom py-3">
+        <p>
+          <a
+            href="javascript:{document.getElementById('remove').submit()}"
+            class="btn btn-danger btn-2"
+          >
+            Remove
+          </a>
+        </p>
+        <form
+          action="{% url 'properties:delete' property.id %}"
+          method="POST"
+          id="remove"
+        >
+          {% csrf_token %}
+          <input type="hidden" />
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

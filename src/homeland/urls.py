@@ -25,7 +25,7 @@ urlpatterns = [
     path('about', about_view, name='about'),
     path('contact', contact_view, name='contact'),
     path('properties/', include('properties.urls')),
-    path('users/', include('accounts.urls')),
+    path('user/', include('accounts.urls')),
 ]
 
 if settings.DEBUG:

@@ -60,28 +60,54 @@
               >
                 <a href="{% url 'contact' %}">Contact</a>
               </li>
-              <li
-              {% if 'login' in request.path %}
-                class="active"
+              {% if user.is_authenticated %}
+                <li 
+                {% if 'user' in request.path %}
+                  class="has-children active"
+                {% else %}
+                  class="has-children"
+                {% endif %}
+                >
+                  <a>{{ user.name }}</a>
+                  <ul class="dropdown arrow-top">
+                    <li
+                    {% if 'dashboard' in request.path %}
+                      class="active"
+                    {% endif %}
+                    ><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                    <li
+                    {% if 'add' in request.path %}
+                      class="active"
+                    {% endif %}
+                    ><a href="{% url 'properties:add' %}">Add Property</a></li>
+                    <li><a href="feedback.html">Feedback</a></li>
+                    <li>
+                      <a href="javascript:{document.getElementById('logout').submit()}">
+                        Logout
+                      </a>
+                      <form action="{% url 'accounts:logout' %}" method="POST" id="logout">
+                        {% csrf_token %}
+                        <input type="hidden">
+                      </form>
+                    </li>
+                  </ul>
+                </li>
+              {% else %}
+                <li
+                {% if 'login' in request.path %}
+                  class="active"
+                {% endif %}
+                >
+                  <a href="{% url 'accounts:login' %}">Login</a>
+                </li>
+                <li
+                {% if 'signup' in request.path %}
+                  class="active"
+                {% endif %}
+                >
+                  <a href="{% url 'accounts:register' %}">Sign Up</a>
+                </li>
               {% endif %}
-              >
-                <a href="{% url 'accounts:login' %}">Login</a>
-              </li>
-              <li
-              {% if 'signup' in request.path %}
-                class="active"
-              {% endif %}
-              >
-                <a href="{% url 'accounts:register' %}">Sign Up</a>
-              </li>
-              <!-- <li class="has-children">
-                <a href="#">User</a>
-                <ul class="dropdown arrow-top">
-                  <li><a href="dashboard.html">Dashboard</a></li>
-                  <li><a href="add_property.html">Add Property</a></li>
-                  <li><a href="feedback.html">Feedback</a></li>
-                </ul>
-              </li> -->
               <li></li>
             </ul>
           </nav>
