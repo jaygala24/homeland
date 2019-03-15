@@ -80,7 +80,7 @@
                       class="active"
                     {% endif %}
                     ><a href="{% url 'properties:add' %}">Add Property</a></li>
-                    <li><a href="feedback.html">Feedback</a></li>
+                    <li><a href="{% url 'accounts:feedback' %}">Feedback</a></li>
                     <li>
                       <a href="javascript:{document.getElementById('logout').submit()}">
                         Logout

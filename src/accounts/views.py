@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
 from properties.models import Property
+from inquiries.models import Feedback
 
 User = get_user_model()
 
@@ -64,3 +65,28 @@ def dashboard_view(request):
         }
         return render(request, 'accounts/dashboard.html', context)
     return redirect('accounts:login')
+
+
+def feedback_view(request):
+    if request.user.is_authenticated:
+        feedback = Feedback.objects.filter(user=request.user).first()
+        if request.method == "POST":
+            message = request.POST.get('message', None)
+            print(message)
+            if message != "":
+                if feedback is not None:
+                    feedback.message = message
+                else:
+                    feedback = Feedback.objects.create(
+                        user=request.user, message=message)
+                feedback.save()
+                messages.success(request, 'Thanks for your feedback')
+                return redirect('accounts:dashboard')
+            messages.error(request, 'Please fill the form to submit')
+            return redirect('accounts:feedback')
+        context = {}
+        if feedback is not None:
+            context['message'] = feedback.message
+        return render(request, 'accounts/feedback.html', context)
+    messages.warning(request, "You must log in to access our resources")
+    return redirect('login')

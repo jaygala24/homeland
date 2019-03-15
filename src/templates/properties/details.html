@@ -129,20 +129,28 @@
           </div>
           <div class="row mb-5">
             <div class="col-md-12 text-center border-bottom border-top py-3">
+              <span class="d-inline-block text-black mb-0 caption-text">
+                {{ property.status }}
+              </span>
+            </div>
+            <div class="col-md-12 text-center border-bottom border-top py-3">
               <span class="d-inline-block text-black mb-0 caption-text"
                 >Location</span
               >
-              <strong class="d-block">
+              <strong class="d-block caption-text">
                 {{ property.address }}, {{ property.city }} -
                 {{ property.zipcode }}
               </strong>
             </div>
+            {% if facility %}
             <div class="col-md-12 text-center border-bottom border-top py-3">
-              <span class="d-inline-block text-black mb-0 caption-text">
-                Sale
-              </span>
+              <span class="d-inline-block text-black mb-0 caption-text"
+                >Nearby Facilities</span
+              >
+              <strong class="d-block caption-text">{{ facility }}</strong>
             </div>
           </div>
+          {% endif %}
           <h2 class="h4 text-black">Description</h2>
           <p>
             {{ property.description }}
@@ -156,26 +164,53 @@
           <form action="" class="form-contact-agent">
             <div class="form-group">
               <label for="name">Name</label>
-              <input type="text" id="name" class="form-control" 
-              {% if user.id != property.realtor %}
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                {%
+                if
+                user.id
+                !="property.realtor"
+                %}
                 disabled
-              {% endif %}
+                {%
+                endif
+                %}
               />
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" id="email" class="form-control" 
-              {% if user.id != property.realtor %}
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                {%
+                if
+                user.id
+                !="property.realtor"
+                %}
                 disabled
-              {% endif %}
+                {%
+                endif
+                %}
               />
             </div>
             <div class="form-group">
               <label for="phone">Phone</label>
-              <input type="text" id="phone" class="form-control" 
-              {% if user.id != property.realtor %}
+              <input
+                type="text"
+                id="phone"
+                class="form-control"
+                {%
+                if
+                user.id
+                !="property.realtor"
+                %}
                 disabled
-              {% endif %}
+                {%
+                endif
+                %}
               />
             </div>
             <div class="form-group">
@@ -184,14 +219,20 @@
                 id="phone"
                 class="btn btn-primary"
                 value="Send Message"
-                {% if user.id != property.realtor %}
-                  disabled
-                {% endif %}
+                {%
+                if
+                user.id
+                !="property.realtor"
+                %}
+                disabled
+                {%
+                endif
+                %}
               />
             </div>
           </form>
         </div>
-        
+
         {% if property.is_verified %}
         <div class="bg-white widget border rounded">
           <h3 class="h4 text-black widget-title mb-3">Homeland Team</h3>

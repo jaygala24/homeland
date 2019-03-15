@@ -72,3 +72,10 @@ verification_choices = {
     True: 'Verified',
     False: 'Not Verified'
 }
+
+subject_choices = {
+    1: 'Account Services',
+    2: 'Loan Support',
+    3: 'Grievance',
+    4: 'Suggestions'
+}

@@ -29,6 +29,17 @@ def property_view(request, property_id):
         context = {
             'property': property
         }
+        facility = []
+        if property.is_school:
+            facility.append('School')
+        if property.is_firestation:
+            facility.append('Fire Station')
+        if property.is_policestation:
+            facility.append('Police Station')
+        if property.is_hospital:
+            facility.append('Hospital')
+        context['facility'] = ", ".join(facility)
+        print(facility)
         return render(request, 'properties/details.html', context)
     messages.warning(request, "You must log in to access our services")
     return redirect('accounts:login')
@@ -86,7 +97,7 @@ def search_view(request):
 def add_view(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            print(request.POST)
+            print(request.POST.get('School'))
             print(request.FILES)
             title = request.POST.get('title', None)
             address = request.POST.get('address', None)
@@ -97,6 +108,13 @@ def add_view(request):
             sqft = request.POST.get('sqft', None)
             price = request.POST.get('price', None)
             description = request.POST.get('description', None)
+            is_school = True if request.POST.get('school', False) else False
+            is_firestation = True if request.POST.get(
+                'firestation', False) else False
+            is_policestation = True if request.POST.get(
+                'policestation', False) else False
+            is_hospital = True if request.POST.get(
+                'hospital', False) else False
             photo_main = request.FILES.get('photo_main', None)
             photo_1 = request.FILES.get('photo_1', None)
             photo_2 = request.FILES.get('photo_2', None)
@@ -105,7 +123,8 @@ def add_view(request):
             photo_5 = request.FILES.get('photo_5', None)
             if title and address and zipcode and sqft and price and description and photo_main:
                 property = Property.objects.create(realtor=request.user, title=title, address=address, zipcode=zipcode, area=area, type=types, status=status, sqft=sqft, price=price,
-                                                   description=description, photo_main=photo_main, photo_1=photo_1, photo_2=photo_2, photo_3=photo_3, photo_4=photo_4, photo_5=photo_5)
+                                                   description=description, photo_main=photo_main, photo_1=photo_1, photo_2=photo_2, photo_3=photo_3, photo_4=photo_4, photo_5=photo_5,
+                                                   is_school=is_school, is_firestation=is_firestation, is_policestation=is_policestation, is_hospital=is_hospital)
                 property.save()
                 messages.success(request, 'Successfully added property')
                 return redirect('accounts:dashboard')

@@ -34,6 +34,7 @@
           labore eius.
         </p>
       </div>
+      {% if properties %} 
       <div class="col-md-6 col-lg-6 text-center border-bottom border-top py-3">
         <span class="d-inline-block text-black mb-0 caption-text"
           >Property</span
@@ -72,6 +73,13 @@
         </form>
       </div>
       {% endfor %}
+      {% else %}
+      <div class="col-md-6 col-lg-6 text-center py-3">
+        <span class="d-inline-block text-black mb-0 caption-text"
+          >No property posted!</span
+        >
+      </div>
+      {% endif %}
     </div>
   </div>
 </div>
