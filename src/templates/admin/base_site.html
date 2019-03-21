@@ -1,0 +1,11 @@
+{% extends 'admin/base.html' %}
+<!-- Load Static -->
+{% load static %}
+<!-- Brand -->
+{% block branding %}
+<h1 id="head">Homeland<span id="logo">.</span></h1>
+{% endblock %}
+<!-- Style -->
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+{% endblock %}

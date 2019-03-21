@@ -1,11 +1,26 @@
-from django.shortcuts import render, redirect
+import random
+import string
+from django.conf import settings
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
+from django.core.mail import EmailMessage
+from django.template.loader import get_template
+from django.template import Context
 from properties.models import Property
 from inquiries.models import Feedback
 
 User = get_user_model()
+
+
+def generate_token(stringLength=6):
+    """
+    Generate a random string of letters and digits
+    """
+    lettersAndDigits = string.ascii_letters + string.digits
+    return ''.join(random.choice(lettersAndDigits) for i in range(stringLength))
 
 
 def register_view(request):
@@ -24,10 +39,12 @@ def register_view(request):
                 return redirect('accounts:register')
             user = User.objects.create_user(
                 email=email, name=name, phone=phone, password=password)
+            user.is_active = True
             user.save()
+            login(request, user)
             messages.success(
-                request, 'Your account has been created and can log in')
-            return redirect('accounts:login')
+                request, 'Your account has been created')
+            return redirect('accounts:dashboard')
         # Passwords do not match
         messages.error(request, 'Passwords do not match')
         return redirect('accounts:register')
@@ -36,16 +53,15 @@ def register_view(request):
 
 def login_view(request):
     if request.method == "POST":
-        email = request.POST['email']
-        password = request.POST['password']
+        email = request.POST.get('email', None)
+        password = request.POST.get('password', None)
         user = authenticate(email=email, password=password)
-        # Authenticate
         if user is not None:
             login(request, user)
             messages.success(request, 'You have successfully logged in')
             return redirect('accounts:dashboard')
         messages.error(request, 'Invalid credentials')
-        return redirect('accounts:login')
+        return render(request, 'accounts/login.html')
     return render(request, 'accounts/login.html')
 
 
@@ -54,6 +70,69 @@ def logout_view(request):
         logout(request)
         messages.success(request, 'You have successfully logged out')
         return redirect('accounts:login')
+
+
+def password_email_view(request, *args, **kwargs):
+    if request.method == "POST":
+        email = request.POST.get('email', None)
+        user = User.objects.filter(email=email).first()
+        if user is not None:
+            token = generate_token()
+            user.token = token
+            user.save()
+            subject = 'Password Reset'
+            from_email = settings.EMAIL_HOST_USER
+            to_list = [email, from_email, ]
+            context = {
+                'title': 'One Time Password',
+                'name': user.name,
+                'token': token,
+                'message': "We have received password reset request. Contact customer support if not initiated by you."
+            }
+            message = get_template(
+                'accounts/verify_email.html').render(context)
+            msg = EmailMessage(subject, message, to=to_list,
+                               from_email=from_email)
+            msg.content_subtype = 'html'
+            msg.send()
+            messages.success(
+                request, 'OTP is sent to your registered email')
+            request.session['email'] = email
+            return redirect('accounts:password-otp')
+        messages.error(request, "Invalid email credential")
+        return redirect('accounts:password-email')
+    return render(request, 'accounts/password_email.html')
+
+
+def password_otp_view(request):
+    email = request.session['email']
+    if request.method == "POST":
+        otp = request.POST.get('otp', None)
+        user = User.objects.filter(email=email).first()
+        if user.token == otp:
+            user.token = None
+            user.save()
+            return redirect('accounts:password-reset')
+        messages.error(request, 'Invalid OTP')
+        return redirect('accounts:password-otp')
+    return render(request, 'accounts/password_otp.html')
+
+
+def password_reset_view(request):
+    email = request.session['email']
+    print(email)
+    if request.method == "POST":
+        password = request.POST.get('password', None)
+        password2 = request.POST.get('password2', None)
+        user = User.objects.filter(email=email).first()
+        if password != password2:
+            messages.error(request, "Passwords do not match")
+            return redirect('accounts:password-reset')
+        user.set_password(password)
+        user.save()
+        messages.success(request, 'Password Changed Successfully')
+        return redirect('accounts:login')
+    return render(request, 'accounts/password.html')
 
 
 def dashboard_view(request):
@@ -90,3 +169,35 @@ def feedback_view(request):
         return render(request, 'accounts/feedback.html', context)
     messages.warning(request, "You must log in to access our resources")
     return redirect('login')
+
+
+def inquiry_view(request, *args, **kwargs):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            property_id = request.POST.get('id', None)
+            name = request.POST.get('name', None)
+            email = request.POST.get('email', None)
+            phone = request.POST.get('phone', None)
+            if name and email and phone:
+                property = get_object_or_404(Property, pk=property_id)
+                subject = 'Property Inquiry'
+                from_email = settings.EMAIL_HOST_USER
+                to_list = [property.realtor.email, from_email, ]
+                context = {
+                    'title': property.title,
+                    'name': name,
+                    'email': email,
+                    'phone': phone,
+                    'message': "The following user have showed interest in above mentioned property"
+                }
+                message = get_template(
+                    'accounts/verify_email.html').render(context)
+                msg = EmailMessage(subject, message, to=to_list,
+                                from_email=from_email)
+                msg.content_subtype = 'html'
+                msg.send()
+                messages.success(
+                    request, 'Thanks for your interest')
+                return reverse('properties:detail', {kwargs: {property_id: property_id}})
+            return redirect('accounts:dashboard')
+    return redirect('accounts:login')

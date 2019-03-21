@@ -135,3 +135,10 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media-cdn")
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+# Email Config
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'YOUR EMAIL'
+EMAIL_HOST_PASSWORD = 'YOUR PASSWORD'
+EMAIL_USE_TLS = True

@@ -19,11 +19,16 @@
           >Property Details of</span
         >
         <h1 class="mb-2">{{ property.title }}</h1>
-        <p class="mb-5">
+        <p class="mb-4">
           <strong class="h2 text-success font-weight-bold"
             >&#8377; {{ property.price | intcomma }}</strong
           >
         </p>
+        {% if property.is_verified %}
+        <span class="p px-2 py-1 text-white caption-text rounded bg-success"
+          >Verified</span
+        >
+        {% endif %}
       </div>
     </div>
   </div>
@@ -160,87 +165,34 @@
 
       <div class="col-lg-4">
         <div class="bg-white widget border rounded">
-          <h3 class="h4 text-black widget-title mb-3">Contact Owner</h3>
-          <form action="" class="form-contact-agent">
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                class="form-control"
-                {%
-                if
-                user.id
-                !="property.realtor"
-                %}
-                disabled
-                {%
-                endif
-                %}
-              />
-            </div>
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                class="form-control"
-                {%
-                if
-                user.id
-                !="property.realtor"
-                %}
-                disabled
-                {%
-                endif
-                %}
-              />
-            </div>
-            <div class="form-group">
-              <label for="phone">Phone</label>
-              <input
-                type="text"
-                id="phone"
-                class="form-control"
-                {%
-                if
-                user.id
-                !="property.realtor"
-                %}
-                disabled
-                {%
-                endif
-                %}
-              />
-            </div>
-            <div class="form-group">
-              <input
-                type="submit"
-                id="phone"
-                class="btn btn-primary"
-                value="Send Message"
-                {%
-                if
-                user.id
-                !="property.realtor"
-                %}
-                disabled
-                {%
-                endif
-                %}
-              />
-            </div>
-          </form>
+          <h3 class="h4 text-black widget-title text-center mb-3">
+            Contact Owner
+          </h3>
+          <div class="col-md-12 text-center border-bottom border-top py-3">
+            <span class="d-inline-block text-black mb-0 caption-text"
+              >Name</span
+            >
+            <strong class="d-block caption-text">
+              {{ property.realtor.name }}
+            </strong>
+          </div>
+          <div class="col-md-12 text-center border-bottom border-top py-3">
+            <span class="d-inline-block text-black mb-0 caption-text"
+              >Phone</span
+            >
+            <strong class="d-block caption-text">
+              {{ property.realtor.phone }}
+            </strong>
+          </div>
+          <div class="col-md-12 text-center border-bottom border-top py-3">
+            <span class="d-inline-block text-black mb-0 caption-text"
+              >Email</span
+            >
+            <strong class="d-block caption-text">
+              {{ property.realtor.email }}
+            </strong>
+          </div>
         </div>
-
-        {% if property.is_verified %}
-        <div class="bg-white widget border rounded">
-          <h3 class="h4 text-black widget-title mb-3">Homeland Team</h3>
-          <p>
-            This property has been verified by the Homeland Team.
-          </p>
-        </div>
-        {% endif %}
       </div>
     </div>
   </div>
