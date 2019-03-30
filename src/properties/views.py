@@ -47,36 +47,36 @@ def property_view(request, property_id):
 
 def search_view(request):
     queryset = Property.objects.order_by('-timestamp')
-    print(queryset)
     # Keywords
     if 'keywords' in request.GET:
         keywords = request.GET['keywords']
-        if keywords:
-            queryset = queryset.filter(Q(description__icontains=keywords))
+        if keywords and keywords != "":
+            queryset = queryset.filter(
+                Q(description__icontains=keywords) | Q(zipcode__icontains=keywords))
     # Type
-    if 'type' in request.GET:
-        types = request.GET['type']
-        if type != 'All':
+    if 'types' in request.GET:
+        types = request.GET['types']
+        if types and types != 'All':
             queryset = queryset.filter(type__exact=types)
     # Price
     if 'price' in request.GET:
         price = request.GET['price']
-        if price != 'All':
+        if price and price != 'All':
             queryset = queryset.filter(price__exact=price)
     # Area
     if 'area' in request.GET:
         area = request.GET['area']
-        if type != 'All':
+        if area and area != 'All':
             queryset = queryset.filter(area__exact=area)
     # Status
     if 'status' in request.GET:
         status = request.GET['status']
-        if status != 'All':
+        if status and status != 'All':
             queryset = queryset.filter(status__exact=status)
     # Verification
     if 'verification' in request.GET:
         verification = request.GET['verification']
-        if verification != 'All':
+        if verification and verification != 'All':
             queryset = queryset.filter(is_verified__exact=verification)
 
     paginator = Paginator(queryset, 6)

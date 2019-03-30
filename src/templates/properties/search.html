@@ -56,7 +56,7 @@
                 class="form-control d-block rounded-0"
               >
                 <option value="All"
-                {% if values.types == 'All' %}
+                {% if values.types != 'All' %}
                   selected
                 {% endif %}
                 >All</option>
@@ -104,7 +104,7 @@
                 class="form-control d-block rounded-0"
               >
                 <option value="All"
-                {% if values.price == 'All' %}
+                {% if values.price == "All" %}
                   selected
                 {% endif %}
                 >All</option>
@@ -152,7 +152,7 @@
                 class="form-control d-block rounded-0"
               >
                 <option value="All"
-                {% if values.verificaction == 'All' %}
+                {% if values.verification == 'All' %}
                   selected
                 {% endif %}
                 >All</option>

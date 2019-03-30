@@ -46,10 +46,11 @@
             <div class="select-wrap">
               <span class="icon icon-arrow_drop_down"></span>
               <select
-                name="type"
+                name="types"
                 id="offer-types"
                 class="form-control d-block rounded-0"
               >
+                <option value="All">All</option>
                 {% for key,value in type_choices.items %}
                 <option value="{{ key }}">{{ value }}</option>
                 {% endfor %}
@@ -65,6 +66,7 @@
                 id="offer-types"
                 class="form-control d-block rounded-0"
               >
+                <option value="All">All</option>
                 {% for key,value in area_choices.items %}
                 <option value="{{ key }}">{{ value }}</option>
                 {% endfor %}
@@ -80,6 +82,7 @@
                 id="offer-types"
                 class="form-control d-block rounded-0"
               >
+                <option value="All">All</option>
                 {% for key,value in price_choices.items %}
                 <option value="{{ key }}">&#8377; {{ value }}</option>
                 {% endfor %}
@@ -95,6 +98,7 @@
                 id="select-city"
                 class="form-control d-block rounded-0"
               >
+                <option value="All">All</option>
                 {% for key,value in status_choices.items %}
                 <option value="{{ key }}">{{ value }}</option>
                 {% endfor %}
@@ -110,6 +114,7 @@
                 id="select-city"
                 class="form-control d-block rounded-0"
               >
+                <option value="All">All</option>
                 {% for key,value in verification_choices.items %}
                 <option value="{{ key }}">{{ value }}</option>
                 {% endfor %}
