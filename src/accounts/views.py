@@ -1,5 +1,6 @@
 import random
 import string
+import re
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -19,7 +20,7 @@ def generate_token(stringLength=6):
     """
     Generate a random string of letters and digits
     """
-    lettersAndDigits = string.ascii_letters + string.digits
+    lettersAndDigits = string.ascii_letters
     return ''.join(random.choice(lettersAndDigits) for i in range(stringLength))
 
 
@@ -39,16 +40,42 @@ def register_view(request):
                 return redirect('accounts:register')
             user = User.objects.create_user(
                 email=email, name=name, phone=phone, password=password)
-            user.is_active = True
+            token = generate_token()
+            user.token = token + str(user.id)
             user.save()
-            login(request, user)
+            subject = 'Account Verification'
+            from_email = settings.EMAIL_HOST_USER
+            to_list = [email, from_email, ]
+            context = {
+                'title': 'One Time Password',
+                'name': user.name,
+                'url': 'http://localhost:8000/user/verify/' + user.token + "/",
+                'message': "Verify your email to activate your account"
+            }
+            message = get_template(
+                'accounts/verify_email.html').render(context)
+            msg = EmailMessage(subject, message, to=to_list,
+                               from_email=from_email)
+            msg.content_subtype = 'html'
+            msg.send()
             messages.success(
-                request, 'Your account has been created')
-            return redirect('accounts:dashboard')
+                request, 'Verify your email to activate your account')
+            return redirect('accounts:login')
         # Passwords do not match
         messages.error(request, 'Passwords do not match')
         return redirect('accounts:register')
     return render(request, 'accounts/register.html')
+
+
+def verify_email_view(request, token):
+    user_id = int(re.findall('\d+', token)[0])
+    user = User.objects.filter(pk=user_id).first()
+    if user.token == token and not user.is_active:
+        user.is_active = True
+        user.save()
+        messages.success(request, 'Your account has been activated')
+        return render(request, 'accounts/login.html')
+    return redirect('index')
 
 
 def login_view(request):
@@ -78,7 +105,7 @@ def password_email_view(request, *args, **kwargs):
         user = User.objects.filter(email=email).first()
         if user is not None:
             token = generate_token()
-            user.token = token
+            user.token = token + str(user.id)
             user.save()
             subject = 'Password Reset'
             from_email = settings.EMAIL_HOST_USER
@@ -86,7 +113,7 @@ def password_email_view(request, *args, **kwargs):
             context = {
                 'title': 'One Time Password',
                 'name': user.name,
-                'token': token,
+                'url': 'http://localhost:8000/user/password-reset/' + user.token + "/",
                 'message': "We have received password reset request. Contact customer support if not initiated by you."
             }
             message = get_template(
@@ -95,44 +122,30 @@ def password_email_view(request, *args, **kwargs):
                                from_email=from_email)
             msg.content_subtype = 'html'
             msg.send()
-            messages.success(
-                request, 'OTP is sent to your registered email')
-            request.session['email'] = email
-            return redirect('accounts:password-otp')
+            messages.success(request, "Email is sent to your registered email")
+            return redirect('accounts:password-email')
         messages.error(request, "Invalid email credential")
         return redirect('accounts:password-email')
     return render(request, 'accounts/password_email.html')
 
 
-def password_otp_view(request):
-    email = request.session['email']
-    if request.method == "POST":
-        otp = request.POST.get('otp', None)
-        user = User.objects.filter(email=email).first()
-        if user.token == otp:
+def password_reset_view(request, token):
+    user_id = int(re.findall('\d+', token)[0])
+    user = User.objects.filter(pk=user_id).first()
+    if user.token == token:
+        if request.method == "POST":
+            password = request.POST.get('password', None)
+            password2 = request.POST.get('password2', None)
+            if password != password2:
+                messages.error(request, "Passwords do not match")
+                return redirect('accounts:password-reset')
+            user.set_password(password)
             user.token = None
             user.save()
-            return redirect('accounts:password-reset')
-        messages.error(request, 'Invalid OTP')
-        return redirect('accounts:password-otp')
-    return render(request, 'accounts/password_otp.html')
-
-
-def password_reset_view(request):
-    email = request.session['email']
-    print(email)
-    if request.method == "POST":
-        password = request.POST.get('password', None)
-        password2 = request.POST.get('password2', None)
-        user = User.objects.filter(email=email).first()
-        if password != password2:
-            messages.error(request, "Passwords do not match")
-            return redirect('accounts:password-reset')
-        user.set_password(password)
-        user.save()
-        messages.success(request, 'Password Changed Successfully')
-        return redirect('accounts:login')
-    return render(request, 'accounts/password.html')
+            messages.success(request, 'Password Changed Successfully')
+            return redirect('accounts:login')
+        return render(request, 'accounts/password.html', {'token': token})
+    return render(request, 'index')
 
 
 def dashboard_view(request):
@@ -193,7 +206,7 @@ def inquiry_view(request, *args, **kwargs):
                 message = get_template(
                     'accounts/verify_email.html').render(context)
                 msg = EmailMessage(subject, message, to=to_list,
-                                from_email=from_email)
+                                   from_email=from_email)
                 msg.content_subtype = 'html'
                 msg.send()
                 messages.success(

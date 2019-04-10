@@ -202,9 +202,9 @@
                   <!-- Body content -->
                   <tr>
                     <td class="content-cell">
-                      <h1>Password Reset Request</h1>
+                      <h1>{{ title }}</h1>
                       <p>Hello {{ name }},</p>
-                      <p>Contact customer support if not initiated by you.</p>
+                      <p>{{ message }}</p>
                       <!-- Action -->
                       <table
                         class="body-action"
@@ -214,13 +214,10 @@
                         cellspacing="0"
                       >
                         <tr>
-                          <td align="center">
-                            <div>
-                              <p class="lead">
-                                <span style="font-weight: bold;">OTP:</span>
-                                {{ token }}
-                              </p>
-                            </div>
+                          <td>
+                            <a href="{{ url }}" target="_blank">
+                              {{ url }}
+                            </a>
                           </td>
                         </tr>
                       </table>

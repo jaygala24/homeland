@@ -47,6 +47,7 @@ def property_view(request, property_id):
 
 def search_view(request):
     queryset = Property.objects.order_by('-timestamp')
+    values = request.GET
     # Keywords
     if 'keywords' in request.GET:
         keywords = request.GET['keywords']
@@ -62,7 +63,7 @@ def search_view(request):
     if 'price' in request.GET:
         price = request.GET['price']
         if price and price != 'All':
-            queryset = queryset.filter(price__exact=price)
+            queryset = queryset.filter(price__lte=price)
     # Area
     if 'area' in request.GET:
         area = request.GET['area']
@@ -77,7 +78,10 @@ def search_view(request):
     if 'verification' in request.GET:
         verification = request.GET['verification']
         if verification and verification != 'All':
-            queryset = queryset.filter(is_verified__exact=verification)
+            if verification == "True":
+                queryset = queryset.filter(is_verified__exact=True)
+            else:
+                queryset = queryset.filter(is_verified__exact=False)
 
     paginator = Paginator(queryset, 6)
     page = request.GET.get('page')
@@ -89,7 +93,7 @@ def search_view(request):
         'status_choices': status_choices,
         'type_choices': type_choices,
         'verification_choices': verification_choices,
-        'values': request.GET
+        'values': values
     }
     return render(request, 'properties/search.html', context)
 
@@ -122,7 +126,7 @@ def add_view(request):
             photo_4 = request.FILES.get('photo_4', None)
             photo_5 = request.FILES.get('photo_5', None)
             if title and address and zipcode and sqft and price and description and photo_main:
-                property = Property.objects.create(realtor=request.user, title=title, address=address, zipcode=zipcode, area=area, type=types, status=status, sqft=sqft, price=price,
+                property = Property.objects.create(realtor=request.user, title=title, address=address, zipcode=zipcode, area=area, type=types, status=status, sqft=sqft, price=int(price),
                                                    description=description, photo_main=photo_main, photo_1=photo_1, photo_2=photo_2, photo_3=photo_3, photo_4=photo_4, photo_5=photo_5,
                                                    is_school=is_school, is_firestation=is_firestation, is_policestation=is_policestation, is_hospital=is_hospital)
                 property.save()
