@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, re_path, include
-from .views import index_view, about_view, error_redirect_view
+from .views import index_view, about_view, error_redirect_view, media_view
 from inquiries.views import contact_view
 
 urlpatterns = [
@@ -27,7 +27,8 @@ urlpatterns = [
     path('contact', contact_view, name='contact'),
     path('properties/', include('properties.urls')),
     path('user/', include('accounts.urls')),
-    re_path(r'^', error_redirect_view, name='404'),
+    # path('media', media_view, name='media'),
+    # re_path(r'^', error_redirect_view, name='404'),
 ]
 
 if settings.DEBUG:
