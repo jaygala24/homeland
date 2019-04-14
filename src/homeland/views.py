@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from properties.models import Property
-from properties.choices import price_choices, area_choices, status_choices, type_choices, verification_choices
+from properties.choices import (
+    price_choices, area_choices, status_choices,
+    type_choices, verification_choices
+)
 
 
 def index_view(request):

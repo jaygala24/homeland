@@ -1,20 +1,19 @@
 #header {
   height: 50px;
-  padding: auto;
   background: #10284e;
   color: #fff;
 }
 
-#branding h1 {
-  color: #fff;
-}
-
 #head {
-  letter-spacing: 1.75px;
+  letter-spacing: 1.5px;
 }
 
 #logo {
   color: red;
+}
+
+#branding h1 {
+  color: #fff;
 }
 
 a:link,

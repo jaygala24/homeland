@@ -27,8 +27,8 @@ urlpatterns = [
     path('contact', contact_view, name='contact'),
     path('properties/', include('properties.urls')),
     path('user/', include('accounts.urls')),
-    # path('media', media_view, name='media'),
-    # re_path(r'^', error_redirect_view, name='404'),
+    path('media/', media_view, name='media'),
+    re_path(r'^', error_redirect_view, name='404'),
 ]
 
 if settings.DEBUG:
