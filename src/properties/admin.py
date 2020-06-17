@@ -6,8 +6,9 @@ class PropertyAdmin(admin.ModelAdmin):
     list_display = ('title', 'realtor', 'is_verified',)
     list_filter = ('is_verified',)
     fieldsets = (
+        ('Realtor', {'fields': ('realtor',)}),
         ('Details', {'fields': ('title', 'address',
-                                'area', 'city', 'state', 'zipcode', 'type', 'sqft', 'status',)}),
+                                'area', 'city', 'state', 'zipcode', 'type', 'sqft', 'status', 'description',)}),
         ('Photo', {'fields': ('photo_main', 'photo_1',
                               'photo_2', 'photo_3', 'photo_4', 'photo_5',)}),
         ('Facility', {'fields': ('is_school', 'is_firestation',

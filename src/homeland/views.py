@@ -30,7 +30,3 @@ def contact_view(request):
 
 def error_redirect_view(request):
     return redirect('index')
-
-
-def media_view(request):
-    pass
