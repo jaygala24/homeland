@@ -8,7 +8,7 @@ class PropertyAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Realtor', {'fields': ('realtor',)}),
         ('Details', {'fields': ('title', 'address',
-                                'area', 'city', 'state', 'zipcode', 'type', 'sqft', 'status', 'description',)}),
+                                'area', 'city', 'state', 'zipcode', 'type', 'sqft', 'price', 'status', 'description',)}),
         ('Photo', {'fields': ('photo_main', 'photo_1',
                               'photo_2', 'photo_3', 'photo_4', 'photo_5',)}),
         ('Facility', {'fields': ('is_school', 'is_firestation',
